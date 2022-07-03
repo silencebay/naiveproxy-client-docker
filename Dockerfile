@@ -15,7 +15,7 @@ RUN set -eux; \
         "linux/arm/v7") architecture=openwrt-arm_cortex-a15_neon-vfpv4 ;; \
     esac; \
     \
-    download_url=$(curl -L https://api.github.com/repos/klzgrad/naiveproxy/releases | jq -r --arg architecture "$architecture" '.[].assets[] | select (.name | contains($architecture)) | .browser_download_url' -); \
+    download_url=$(curl -L https://api.github.com/repos/klzgrad/naiveproxy/releases/latest | jq -r --arg assert "^naiveproxy-.+$architecture" '.assets[] | select (.name | test($assert))| .browser_download_url' -); \
     curl -L $download_url | tar x -Jvf -; \
     mv naiveproxy-* naiveproxy;
 
